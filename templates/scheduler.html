@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheduler</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Course Scheduler</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% if current_user.role == 'admin' %}
+        <form method="POST">
+            <label for="course">Course Name:</label>
+            <select name="course" required>
+                {% for course in courses %}
+                    <option value="{{ course }}">{{ course }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label for="instructor">Instructor:</label>
+            <select name="instructor" required>
+                {% for instructor in instructors %}
+                    <option value="{{ instructor }}">{{ instructor }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label for="room">Room:</label>
+            <select name="room" required>
+                {% for room in rooms %}
+                    <option value="{{ room }}">{{ room }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label for="time_slot">Time Slot:</label>
+            <select name="time_slot" required>
+                {% for time_slot in time_slots %}
+                    <option value="{{ time_slot }}">{{ time_slot }}</option>
+                {% endfor %}
+            </select><br><br>
+
+            <label for="date">Date:</label>
+            <input type="date" name="date" required><br><br>
+
+            <input type="submit" value="Add Course">
+        </form>
+        {% endif %}
+
+        <h2>Scheduled Courses</h2>
+        <table>
+            <tr>
+                <th>Course</th>
+                <th>Instructor</th>
+                <th>Room</th>
+                <th>Time Slot</th>
+                <th>Date</th>
+            </tr>
+            {% for course in scheduled_courses %}
+            <tr>
+                <td>{{ course['course'] }}</td>
+                <td>{{ course['instructor'] }}</td>
+                <td>{{ course['room'] }}</td>
+                <td>{{ course['time_slot'] }}</td>
+                <td>{{ course['date'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <!-- Logout button -->
+        <br>
+        <a href="{{ url_for('logout') }}" class="button">Logout</a>
+    </div>
+</body>
+</html>
